@@ -1,4 +1,5 @@
 .env
-**/.env
-db_data
 *.bz2
+
+# Volumes
+db_data
