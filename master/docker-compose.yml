@@ -11,7 +11,12 @@ services:
       - ./db_data:/var/lib/mysql
       - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
   powerdns:
-    image: "powerdns/pdns-auth-45"
+    #image: "powerdns/pdns-auth-45"
+    build:
+      context: ./pdns-auth-mysql
+      dockerfile: Dockerfile
+      args:
+        buildno: v0.0.1
     restart: always
     env_file:
       - .env
