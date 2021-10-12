@@ -11,7 +11,7 @@ Notes:
 #### Services:
 * MySQL:
   * volume exposed to allow for backups, this server maintains state for the entire system.
-  * Exposed ports: 3306:3306 33060:33060 (TCP)
+  * Exposed ports: 3306:3306 (TCP)
 * PowerDNS Authoritative:
   * This is not actively used for queries to the outside world, is primarily used for management of the overall service.
   * Exposed ports: TBD
