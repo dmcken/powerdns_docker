@@ -1,6 +1,6 @@
 # MariaDB Replication Configuration
 [mariadb]
-server_id=11
+server_id={{ MYSQL_SERVER_ID | default(11) }}
 log_bin=slave-bin
 binlog-format=mixed
 log_slave_updates=on
