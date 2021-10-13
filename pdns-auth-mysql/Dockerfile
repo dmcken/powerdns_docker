@@ -1,6 +1,22 @@
+# syntax=docker/dockerfile:1
+
 FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+
+
+LABEL org.opencontainers.image.title="Zabbix proxy (SQLite3)" \
+      org.opencontainers.image.authors="Alexey Pustovalov <alexey.pustovalov@zabbix.com>" \
+      org.opencontainers.image.vendor="Zabbix LLC" \
+      org.opencontainers.image.url="https://zabbix.com/" \
+      org.opencontainers.image.description="Zabbix proxy with SQLite3 database support" \
+      org.opencontainers.image.licenses="GPL v2.0" \
+      org.opencontainers.image.documentation="https://www.zabbix.com/documentation/${MAJOR_VERSION}/manual/installation/containers" \
+      org.opencontainers.image.version="${ZBX_VERSION}" \
+      org.opencontainers.image.source="${ZBX_SOURCES}"
+
+# STOPSIGNAL SIGTERM
+
 
 RUN apt update
 
@@ -17,8 +33,11 @@ RUN rm -f /etc/powerdns/pdns.d/bind.conf
 # RUN chown pdns:pdns /var/run/pdns /var/lib/powerdns /etc/powerdns/pdns.d /etc/powerdns/templates.d
 # USER pdns
 
+# Startup script
 COPY startup.py /etc/powerdns/
 RUN chmod +x /etc/powerdns/startup.py
+
+# Copy templates 
 COPY pdns.conf.tpl /etc/powerdns/
 COPY pdns.d/*.tpl /etc/powerdns/pdns.d/
 
@@ -27,5 +46,4 @@ EXPOSE 53/tcp 53/udp
 # Management port
 EXPOSE 8081/tcp
 
-#ENTRYPOINT ["/bin/bash"]
-ENTRYPOINT [ "/etc/powerdns/startup.py" ]
+CMD [ "/etc/powerdns/startup.py" ]
