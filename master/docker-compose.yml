@@ -13,7 +13,7 @@ services:
   powerdns:
     #image: "powerdns/pdns-auth-45"
     build:
-      context: ./pdns-auth-mysql
+      context: ../pdns-auth-mysql
       dockerfile: Dockerfile
       args:
         buildno: v0.0.1
@@ -26,12 +26,10 @@ services:
       - "8081:8081"
     depends_on:
       - "mysql"
-    logging:
-      driver: json-file
-      options:
-        max-size: 50m
-    # volumes:
-    #   - pdns-etc:/etc/powerdns
+    # logging:
+    #   driver: json-file
+    #   options:
+    #     max-size: 50m
   powerdns-admin:
     image: "ngoduykhanh/powerdns-admin:0.2.3"
     restart: always
