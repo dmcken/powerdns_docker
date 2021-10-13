@@ -1,5 +1,8 @@
 .env
 *.bz2
 
+# MySQL extra config file.
+90-extra.cnf
+
 # Volumes
 db_data
