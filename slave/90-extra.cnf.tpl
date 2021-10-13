@@ -4,3 +4,4 @@ server_id=11
 log_bin=slave-bin
 binlog-format=mixed
 log_slave_updates=on
+replicate_do_db=powerdns-auth
