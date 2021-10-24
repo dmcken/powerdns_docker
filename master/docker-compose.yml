@@ -8,10 +8,14 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      # This should not be necessary
       - ./db_data:/var/lib/mysql
       - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
   powerdns:
-    #image: "powerdns/pdns-auth-45"
     build:
       context: ../pdns-auth-mysql
       dockerfile: Dockerfile
@@ -26,10 +30,10 @@ services:
       - "8081:8081"
     depends_on:
       - "mysql"
-    # logging:
-    #   driver: json-file
-    #   options:
-    #     max-size: 50m
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
   powerdns-admin:
     image: "ngoduykhanh/powerdns-admin:0.2.3"
     restart: always
