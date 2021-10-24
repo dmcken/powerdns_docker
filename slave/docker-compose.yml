@@ -7,6 +7,10 @@ services:
       - .env
     volumes:
       - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
   powerdns:
     build:
       context: ../pdns-auth-mysql
@@ -21,3 +25,7 @@ services:
       - "53:53/udp"
     depends_on:
       - "mysql"
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
