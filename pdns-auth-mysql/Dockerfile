@@ -4,23 +4,21 @@ FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-
-LABEL org.opencontainers.image.title="Zabbix proxy (SQLite3)" \
-      org.opencontainers.image.authors="Alexey Pustovalov <alexey.pustovalov@zabbix.com>" \
-      org.opencontainers.image.vendor="Zabbix LLC" \
-      org.opencontainers.image.url="https://zabbix.com/" \
-      org.opencontainers.image.description="Zabbix proxy with SQLite3 database support" \
-      org.opencontainers.image.licenses="GPL v2.0" \
-      org.opencontainers.image.documentation="https://www.zabbix.com/documentation/${MAJOR_VERSION}/manual/installation/containers" \
-      org.opencontainers.image.version="${ZBX_VERSION}" \
-      org.opencontainers.image.source="${ZBX_SOURCES}"
+LABEL org.opencontainers.image.title="PowerDNS Authoritative DNS Server (MariaDB backend)"
+LABEL org.opencontainers.image.authors="David Mc Ken <david.mcken@gmail.com>"
+LABEL org.opencontainers.image.description="Master / Slave authoritative DNS using mysql replication to propagate to the slaves"
+# org.opencontainers.image.vendor="None"
+# org.opencontainers.image.url="https://zabbix.com/"
+# org.opencontainers.image.licenses="GPL v2.0"
+# org.opencontainers.image.documentation="https://www.zabbix.com/documentation/${MAJOR_VERSION}/manual/installation/containers" 
+# org.opencontainers.image.version="${ZBX_VERSION}" 
+# org.opencontainers.image.source="${ZBX_SOURCES}"
 
 # STOPSIGNAL SIGTERM
 
-
 RUN apt update
 
-RUN apt install -y pdns-server pdns-backend-mysql python3-pip python3-setuptools iputils-ping && \
+RUN apt install -y iputils-ping mysql-client pdns-server pdns-backend-mysql python3-pip python3-setuptools  && \
     rm -rf /var/lib/apt/lists/* && \
     apt clean
 
