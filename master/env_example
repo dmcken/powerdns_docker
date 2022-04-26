@@ -10,4 +10,4 @@ MYSQL_PASSWORD=<password>
 # Management env variables
 SQLALCHEMY_DATABASE_URI=mysql://pda:changeme@host.docker.internal/pda
 # Flask secret key (see https://flask.palletsprojects.com/en/2.0.x/config/#SECRET_KEY for how to generate)
-SECRET_KEY
+SECRET_KEY=
