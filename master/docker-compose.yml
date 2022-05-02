@@ -36,15 +36,32 @@ services:
       driver: json-file
       options:
         max-size: 50m
+  mysql_admin:
+    image: "mariadb:10.6"
+    restart: always
+    env_file:
+      - .env_admin
+    ports:
+      - "3306:3306"
+    volumes:
+      # This should not be necessary
+      # - type: volume
+      #   source: ./db_data
+      #   target: /var/lib/mysql
+       - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
   powerdns-admin:
     image: "ngoduykhanh/powerdns-admin:0.2.3"
     restart: always
     env_file:
-      - .env
+      - .env_admin
     ports:
-      - "9191:80"
+      - "${ADMIN_WEB_PORT:-80}:80"
     depends_on:
-      - "mysql"
+      - "mysql_admin"
     logging:
       driver: json-file
       options:
