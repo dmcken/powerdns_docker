@@ -41,8 +41,8 @@ services:
     restart: always
     env_file:
       - .env_admin
-    ports:
-      - "3306:3306"
+    #ports:
+    #  - "3306:3306"
     volumes:
       # This should not be necessary
       # - type: volume
