@@ -1,14 +1,14 @@
 
 # DB env variables
 MYSQL_ROOT_PASSWORD=<my-secret-pw>
-MYSQL_DATABASE=powerdns-auth
-MYSQL_USER=powerdns-auth
+MYSQL_DATABASE=pda
+MYSQL_USER=pda
 MYSQL_PASSWORD=<password>
 
 # Management env variables
 # Defaults to 80 if not set
 ADMIN_WEB_PORT=
-SQLALCHEMY_DATABASE_URI=mysql://pda:changeme@mysql/pda
+SQLALCHEMY_DATABASE_URI=mysql://pda:<MYSQL_PASSWORD from above>@mysql-admin/pda
 # Flask secret key (see https://flask.palletsprojects.com/en/2.0.x/config/#SECRET_KEY for how to generate)
 SECRET_KEY=
 
