@@ -59,7 +59,9 @@ services:
     env_file:
       - .env_admin
     ports:
-      - "${ADMIN_WEB_PORT:-80}:80"
+      - target: 80
+        published: ${ADMIN_WEB_PORT:-80}
+        protocol: tcp
     depends_on:
       - "mysql-admin"
     logging:
