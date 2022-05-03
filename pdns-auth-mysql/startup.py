@@ -1,7 +1,7 @@
 #!/usr/bin/env -S python3
 
 import os
-import jinja2
+#import jinja2
 import logging
 import subprocess
 import sys
@@ -12,6 +12,7 @@ logging.basicConfig(format=LOGGING_FORMAT, level=logging.DEBUG)
 def setup_mysql(op_mode, **argvs):
     '''
     '''
+    # TODO: Break this entire fucntion out to a separate file just to handle each driver
     import pymysql.cursors
 
     tmp_dump_sql = '/tmp/dump.sql'
@@ -50,16 +51,16 @@ def setup_mysql(op_mode, **argvs):
 
                 # Would love to use prepared statements with auto-escaping but
                 # for certain parts I need it to just put what is sent in.
-                sql = "CREATE DATABASE IF NOT EXISTS `{0}`;".format(db_database)
-                logging.debug("Create Database SQL: {0}".format(sql))
+                sql = f"CREATE DATABASE IF NOT EXISTS `{db_database}`;"
+                logging.debug(f"Create Database SQL: {sql}")
                 cursor.execute(sql)
 
                 sql = "GRANT REPLICATION SLAVE,ALL ON `{0}`.* to `{1}`@'%' identified by '{2}';".\
                     format(db_user, db_database, db_password)
-                logging.debug("GRANT ALL SQL: {0}".format(sql))
+                logging.debug(f"GRANT ALL SQL: {sql}")
                 cursor.execute(sql)
 
-                sql = "GRANT REPLICATION SLAVE ON *.* TO '{0}'@'%';".format(db_user)
+                sql = f"GRANT REPLICATION SLAVE ON *.* TO '{db_user}'@'%';"
                 logging.debug("GRANT Replication SQL: {0}".format(sql))
                 cursor.execute(sql)
 
@@ -183,20 +184,23 @@ def master_setup():
     # Setup base config
     subprocess.run(['envtpl', '--keep-template', '/etc/powerdns/pdns.conf.tpl'])
 
-    # Setup database
+    # Setup database, sqlite3 is default
     backends = os.getenv('PDNS_BACKEND','sqlite3')
 
     for curr_backend in backends.split(' '):
         bk_end = backend_data[curr_backend]
 
         # Setup the backend
-        logging.info("Setting up backend: {0}".format(curr_backend))
+        logging.info(f"Setting up backend: {curr_backend}")
         bk_end['setup_func'](op_mode='master', **bk_end['args'])
 
         # Now generate the config files for the backend
         logging.info("Generating config for backend: {0}".format(curr_backend))
-        subprocess.run(['envtpl', '--keep-template',
-            '/etc/powerdns/pdns.d/backend-{0}.conf.tpl'.format(curr_backend)])
+        subprocess.run([
+            'envtpl',
+            '--keep-template',
+            f'/etc/powerdns/pdns.d/backend-{curr_backend}.conf.tpl'
+        ])
 
     # Possibly look at wiping out the env variables once we are done with them as this is the container exposed to the outside world.
     # del os.environ['MYVAR']
@@ -210,7 +214,11 @@ def slave_setup():
     }
 
     # Setup base config
-    subprocess.run(['envtpl', '--keep-template', '/etc/powerdns/pdns.conf.tpl'])
+    subprocess.run([
+        'envtpl',
+        '--keep-template',
+        '/etc/powerdns/pdns.conf.tpl'
+    ])
 
     backends = os.getenv('PDNS_BACKEND','mysql')
 
@@ -218,13 +226,13 @@ def slave_setup():
         bk_end = backend_data[curr_backend]
 
         # Setup the actual backend
-        logging.info("Setting up backend: {0}".format(curr_backend))
+        logging.info(f"Setting up backend: {curr_backend}")
         bk_end['setup_func'](op_mode='slave', **bk_end['args'])
 
         # Now generate the config files for the backend
-        logging.info("Generating config for backend: {0}".format(curr_backend))
+        logging.info(f"Generating config for backend: {curr_backend}")
         subprocess.run(['envtpl', '--keep-template',
-            '/etc/powerdns/pdns.d/backend-{0}.conf.tpl'.format(curr_backend)])
+            f'/etc/powerdns/pdns.d/backend-{curr_backend}.conf.tpl'])
 
 # Main starts here
 operational_mode = os.getenv('PDNS_AUTH_MYSQL_MODE')
@@ -233,7 +241,7 @@ if operational_mode == 'master':
 elif operational_mode == 'slave':
     slave_setup()
 else:
-    logging.error("Unknown operational mode: {0}".format())
+    logging.error(f"Unknown operational mode: {operational_mode}")
     sys.exit(-2)
 
 # Now startup PowerDNS server and replace this
