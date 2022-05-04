@@ -214,6 +214,8 @@ def setup_mysql(op_mode, **argvs):
 
 
 def master_setup():
+    '''
+    '''
     backend_data = {
         'mysql': {
             'setup_func': setup_mysql,
@@ -225,7 +227,11 @@ def master_setup():
     }
 
     # Setup base config
-    subprocess.run(['envtpl', '--keep-template', '/etc/powerdns/pdns.conf.tpl'], check=True)
+    subprocess.run([
+        'envtpl',
+        '--keep-template',
+        '/etc/powerdns/pdns.conf.tpl'
+    ], check=True)
 
     # Setup database, sqlite3 is default
     backends = os.getenv('PDNS_BACKEND','sqlite3')
