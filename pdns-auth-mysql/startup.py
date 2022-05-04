@@ -16,20 +16,7 @@ def setup_mysql_master_tables(cursor, ):
 
 
     '''
-    # There are no tables, we need to import.
-    full_sql_path = os.path.join(settings['sql_path'], 
-                                    settings['schema_file_name'])
-    logging.info(f"Importing tables from: {full_sql_path}")
-
-    import_sql = open(full_sql_path, 'rt').read()
-
-    statements = filter(lambda x: x != '', 
-        map(lambda x: x.strip(),  import_sql.split(';'))
-    )
-
-    for curr_statement in statements:
-        logging.info(f"Executing SQL:\n{curr_statement}")
-        cursor.execute(curr_statement)
+    pass
 
 def setup_mysql_slave_tables():
     '''
@@ -208,6 +195,7 @@ def setup_mysql(op_mode, **argvs):
 
 def master_setup():
     '''
+    Setup master DNS server
     '''
     logging.info("Setting up master server")
     backend_data = {
@@ -253,7 +241,7 @@ def master_setup():
 
 def slave_setup():
     '''
-    
+    Setup slave server
     '''
     logging.info("Setting up slave server")
     backend_data = {
