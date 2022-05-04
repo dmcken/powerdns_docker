@@ -22,7 +22,7 @@ RUN apt install -y iputils-ping mysql-client pdns-server pdns-backend-mysql pyth
     rm -rf /var/lib/apt/lists/* && \
     apt clean
 
-RUN pip3 install --no-cache-dir envtpl PyMySQL jinja2
+RUN pip3 install --no-cache-dir envtpl PyMySQL jinja2>=3.0
 
 RUN mkdir -p /etc/powerdns/pdns.d
 RUN rm -f /etc/powerdns/pdns.d/bind.conf
