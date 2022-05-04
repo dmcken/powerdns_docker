@@ -258,6 +258,9 @@ def master_setup():
     # del os.environ['MYVAR']
 
 def slave_setup():
+    '''
+    
+    '''
     backend_data = {
         'mysql': {
             'setup_func': setup_mysql,
