@@ -6,14 +6,53 @@ import logging
 import subprocess
 import sys
 
+from django.conf import settings
+
 LOGGING_FORMAT = u'%(asctime)s - %(name)s - %(thread)d - %(levelname)s - %(message)s'
 logging.basicConfig(format=LOGGING_FORMAT, level=logging.DEBUG)
+
+try:
+    import pymysql.cursors
+except ImportError:
+    logging.error("Unable to load pymysql library")
+
+
+
+
+def setup_mysql_master_tables(cursor, ):
+    '''
+    Setup MySQL backend for PowerDNS authoritative master
+
+
+    '''
+    # There are no tables, we need to import.
+    full_sql_path = os.path.join(settings['sql_path'], 
+                                    settings['schema_file_name'])
+    logging.info(f"Importing tables from: {full_sql_path}")
+
+    import_sql = open(full_sql_path, 'rt').read()
+
+    statements = filter(lambda x: x != '', 
+        map(lambda x: x.strip(),  import_sql.split(';'))
+    )
+
+    for curr_statement in statements:
+        logging.info(f"Executing SQL:\n{curr_statement}")
+        cursor.execute(curr_statement)
+
+def setup_mysql_slave_tables():
+    '''
+    Setup MySQL backend for PowerDNS authoritative slave
+
+
+    '''
+    pass
 
 def setup_mysql(op_mode, **argvs):
     '''
     '''
-    # TODO: Break this entire fucntion out to a separate file just to handle each driver
-    import pymysql.cursors
+    # TODO: Break this entire fucntion out to a separate file just to
+    # handle each driver, MySQL, Postgres and sqlite
 
     tmp_dump_sql = '/tmp/dump.sql'
 
@@ -26,7 +65,9 @@ def setup_mysql(op_mode, **argvs):
 
     # Attempt to connect using normal credentials
     try:
-        #logging.debug("Connecting to {0}:{1}@{2}/{3}".format(db_user, db_password, db_host, db_database))
+        logging.debug(
+            f"Connecting to {db_user}:{db_password}@{db_host}/{db_database}"
+        )
         connection = pymysql.connect(
             host = db_host,
             user = db_user,
@@ -55,13 +96,19 @@ def setup_mysql(op_mode, **argvs):
                 logging.debug(f"Create Database SQL: {sql}")
                 cursor.execute(sql)
 
-                sql = "GRANT REPLICATION SLAVE,ALL ON `{0}`.* to `{1}`@'%' identified by '{2}';".\
-                    format(db_user, db_database, db_password)
+                sql = f"""
+                    GRANT REPLICATION
+                        SLAVE,ALL
+                    ON 
+                        `{db_user}`.* to `{db_database}`@'%' 
+                    IDENTIFIED BY
+                        '{db_password}';
+                """
                 logging.debug(f"GRANT ALL SQL: {sql}")
                 cursor.execute(sql)
 
                 sql = f"GRANT REPLICATION SLAVE ON *.* TO '{db_user}'@'%';"
-                logging.debug("GRANT Replication SQL: {0}".format(sql))
+                logging.debug(f"GRANT Replication SQL: {sql}")
                 cursor.execute(sql)
 
                 sql = "FLUSH PRIVILEGES;"
@@ -88,22 +135,23 @@ def setup_mysql(op_mode, **argvs):
             if len(result) == 0:
                 if op_mode == 'master':
                     # There are no tables, we need to import.
-                    logging.info("Importing tables from: {0}".format(settings['sql_path']))
+                    full_sql_path = os.path.join(sql_path,  schema_file_name)
+                    logging.info("Importing tables from: {0}".format(full_sql_path))
 
-                    import_sql = open(settings['sql_path'], 'rt').read()
+                    import_sql = open(full_sql_path, 'rt').read()
 
                     statements = filter(lambda x: x != '', 
                         map(lambda x: x.strip(),  import_sql.split(';'))
                     )
 
                     for curr_statement in statements:
-                        logging.info("Executing SQL:\n{0}".format(curr_statement))
+                        logging.info(f"Executing SQL:\n{curr_statement}")
                         cursor.execute(curr_statement)
                 elif op_mode == 'slave':
                     repl_host = os.getenv('PDNS_REPL_HOSTNAME', '')
                     repl_user = os.getenv('PDNS_REPL_USERNAME', '')
                     repl_pass = os.getenv('PDNS_REPL_PASSWORD', '')
-                    repl_db = os.getenv('PDNS_REPL_DATABASE', '')
+                    repl_db   = os.getenv('PDNS_REPL_DATABASE', '')
 
                     logging.info("Setting up slave database")
 
@@ -131,10 +179,10 @@ def setup_mysql(op_mode, **argvs):
                                 'mysqldump',
                                 '--master-data', # --source-data is newer version
                                 '-h', master_conn_data['host'],
-                                '-u', master_conn_data['user'], 
-                                '--password={0}'.format(master_conn_data['password']),
+                                '-u', master_conn_data['user'],
+                                f"--password={master_conn_data['password']}",
                                 '--databases', repl_db,
-                            ], stdout=open(tmp_dump_sql, 'w'))
+                            ], stdout=open(tmp_dump_sql, 'w'), check=True)
 
                             # Restore backup
                             logging.info("Importing backup into local db")
@@ -142,29 +190,25 @@ def setup_mysql(op_mode, **argvs):
                                 # 'cat', tmp_dump_sql,
                                 # '|',
                                 'mysql', '-u', 'root',
-                                '-p{0}'.format(db_root_pass),
-                            ], stdin=open(tmp_dump_sql, 'r'))
+                                f'-p{db_root_pass}',
+                            ], stdin=open(tmp_dump_sql, 'r'), check=True)
                     
                             # Setup replication
                             logging.info("Setup MASTER replication")
-                            sql = """
+                            sql = f"""
                                 CHANGE MASTER TO
-                                    MASTER_HOST='{0}',
-                                    MASTER_USER='{1}',
-                                    MASTER_PASSWORD='{2}',
+                                    MASTER_HOST='{repl_host}',
+                                    MASTER_USER='{repl_user}',
+                                    MASTER_PASSWORD='{repl_pass}',
                                     MASTER_PORT=3306,
                                     MASTER_CONNECT_RETRY=10; 
-                            """.format(
-                                repl_host,
-                                repl_user,
-                                repl_pass,
-                            )
-                            logging.debug("CHANGE MASTER sql:\n{0}".format(sql))
+                            """
+                            logging.debug(f"CHANGE MASTER sql:\n{sql}")
                             master_cursor.execute(sql)
 
                             master_cursor.execute("START SLAVE;")
                 else:
-                    logging.error("Unknown operational mode: '{0}".format(op_mode))
+                    logging.error(f"Unknown operational mode: '{op_mode}")
             else:
                 logging.info("Tables already exist")
 
@@ -176,13 +220,14 @@ def master_setup():
         'mysql': {
             'setup_func': setup_mysql,
             'args': {
-                'sql_path': '/usr/share/doc/pdns-backend-mysql/schema.mysql.sql',
+                'sql_path': 'usr/share/pdns-backend-mysql/schema/',
+                'schema_file_name': 'schema.mysql.sql',
             }
         },
     }
 
     # Setup base config
-    subprocess.run(['envtpl', '--keep-template', '/etc/powerdns/pdns.conf.tpl'])
+    subprocess.run(['envtpl', '--keep-template', '/etc/powerdns/pdns.conf.tpl'], check=True)
 
     # Setup database, sqlite3 is default
     backends = os.getenv('PDNS_BACKEND','sqlite3')
@@ -195,14 +240,17 @@ def master_setup():
         bk_end['setup_func'](op_mode='master', **bk_end['args'])
 
         # Now generate the config files for the backend
-        logging.info("Generating config for backend: {0}".format(curr_backend))
+        logging.info(f"Generating config for backend: {curr_backend}")
         subprocess.run([
             'envtpl',
             '--keep-template',
             f'/etc/powerdns/pdns.d/backend-{curr_backend}.conf.tpl'
-        ])
+        ], check=True)
 
-    # Possibly look at wiping out the env variables once we are done with them as this is the container exposed to the outside world.
+    # Possibly look at wiping out the env variables once we are done with them
+    # as this is the container exposed to the outside world. If there is a zero
+    # day we don't want to expose any unneccesary data. Use a debug mode or
+    # similar to disable this for debugging the container.
     # del os.environ['MYVAR']
 
 def slave_setup():
@@ -218,7 +266,7 @@ def slave_setup():
         'envtpl',
         '--keep-template',
         '/etc/powerdns/pdns.conf.tpl'
-    ])
+    ], check=True)
 
     backends = os.getenv('PDNS_BACKEND','mysql')
 
@@ -231,8 +279,11 @@ def slave_setup():
 
         # Now generate the config files for the backend
         logging.info(f"Generating config for backend: {curr_backend}")
-        subprocess.run(['envtpl', '--keep-template',
-            f'/etc/powerdns/pdns.d/backend-{curr_backend}.conf.tpl'])
+        subprocess.run([
+            'envtpl',
+            '--keep-template',
+            f'/etc/powerdns/pdns.d/backend-{curr_backend}.conf.tpl'
+        ], check=True)
 
 # Main starts here
 operational_mode = os.getenv('PDNS_AUTH_MYSQL_MODE')
@@ -245,5 +296,5 @@ else:
     sys.exit(-2)
 
 # Now startup PowerDNS server and replace this
-pdns_server = '/usr/sbin/pdns_server'
-os.execv(pdns_server, [pdns_server])
+PDNS_SERVER_EXECUTABLE = '/usr/sbin/pdns_server'
+os.execv(PDNS_SERVER_EXECUTABLE, [PDNS_SERVER_EXECUTABLE])
