@@ -113,8 +113,8 @@ def setup_mysql(op_mode, **argvs):
             if len(result) == 0:
                 if op_mode == 'master':
                     # There are no tables, we need to import.
-                    full_sql_path = os.path.join(sql_path,  schema_file_name)
-                    logging.info("Importing tables from: {0}".format(full_sql_path))
+                    full_sql_path = os.path.join(argvs['sql_path'],  argvs['schema_file_name'])
+                    logging.info(f"Importing tables from: {full_sql_path}")
 
                     import_sql = open(full_sql_path, 'rt').read()
 
@@ -144,11 +144,11 @@ def setup_mysql(op_mode, **argvs):
                     with master_connection:
                         with master_connection.cursor() as master_cursor:
                             # Setup replication user
-                            master_cursor.execute("""
+                            master_cursor.execute(f"""
                                 GRANT REPLICATION SLAVE ON *.* 
-                                TO '{0}'@'%'
-                                IDENTIFIED BY '{1}';
-                            """.format(repl_user, repl_pass))
+                                TO '{repl_user}'@'%'
+                                IDENTIFIED BY '{repl_pass}';
+                            """)
                             master_cursor.execute("FLUSH PRIVILEGES;")
                     
                             # Fetch backup
