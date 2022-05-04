@@ -60,7 +60,7 @@ services:
       - .env_admin
     ports:
       - target: 80
-        published: ${ADMIN_WEB_PORT:-80}
+        published: 9191       # ${ADMIN_WEB_PORT:-80}
         protocol: tcp
     depends_on:
       - "mysql-admin"
