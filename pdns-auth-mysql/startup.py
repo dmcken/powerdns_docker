@@ -200,7 +200,7 @@ def master_setup():
     logging.info("Setting up master server")
     backend_data = {
         'mysql': {
-            'setup_func': setup_mysql,
+            'setup_func': 'setup_mysql',
             'args': {
                 'sql_path': 'usr/share/pdns-backend-mysql/schema/',
                 'schema_file_name': 'schema.mysql.sql',
@@ -223,7 +223,8 @@ def master_setup():
 
         # Setup the backend
         logging.info(f"Setting up backend: {curr_backend}")
-        bk_end['setup_func'](op_mode='master', **bk_end['args'])
+        setup_func = globals()[bk_end['setup_func']]
+        setup_func(op_mode='master', **bk_end['args'])
 
         # Now generate the config files for the backend
         logging.info(f"Generating config for backend: {curr_backend}")
