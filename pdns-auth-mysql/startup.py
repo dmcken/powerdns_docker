@@ -6,14 +6,7 @@ import logging
 import subprocess
 import sys
 
-LOGGING_FORMAT = u'%(asctime)s - %(name)s - %(thread)d - %(levelname)s - %(message)s'
-logging.basicConfig(format=LOGGING_FORMAT, level=logging.DEBUG)
-
-try:
-    import pymysql.cursors
-except ImportError:
-    logging.error("Unable to load pymysql library")
-
+import pymysql.cursors
 
 
 
@@ -216,6 +209,7 @@ def setup_mysql(op_mode, **argvs):
 def master_setup():
     '''
     '''
+    logging.info("Setting up master server")
     backend_data = {
         'mysql': {
             'setup_func': setup_mysql,
@@ -261,6 +255,7 @@ def slave_setup():
     '''
     
     '''
+    logging.info("Setting up slave server")
     backend_data = {
         'mysql': {
             'setup_func': setup_mysql,
@@ -293,6 +288,9 @@ def slave_setup():
         ], check=True)
 
 # Main starts here
+LOGGING_FORMAT = '%(asctime)s - %(name)s - %(thread)d - %(levelname)s - %(message)s'
+logging.basicConfig(format=LOGGING_FORMAT, level=logging.DEBUG)
+
 operational_mode = os.getenv('PDNS_AUTH_MYSQL_MODE')
 if operational_mode == 'master':
     master_setup()
