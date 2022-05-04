@@ -6,8 +6,6 @@ import logging
 import subprocess
 import sys
 
-from django.conf import settings
-
 LOGGING_FORMAT = u'%(asctime)s - %(name)s - %(thread)d - %(levelname)s - %(message)s'
 logging.basicConfig(format=LOGGING_FORMAT, level=logging.DEBUG)
 
