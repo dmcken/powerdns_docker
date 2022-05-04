@@ -49,7 +49,7 @@ api=yes
 # api-key       Static pre-shared authentication key for access to the REST API
 #
 # api-key=
-api-key={{ PDNS_AUTH_API_KEY | default(gsqlite3) }}
+api-key={{ PDNS_AUTH_API_KEY | default("gsqlite3") }}
 
 #################################
 # axfr-fetch-timeout    Maximum time in seconds for inbound AXFR to start or be idle after starting
