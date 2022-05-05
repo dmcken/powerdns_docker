@@ -2,4 +2,4 @@
 
 envtpl --keep-template 90-extra.cnf.tpl
 
-docker-compose up -d mysql
+docker-compose up -d db
