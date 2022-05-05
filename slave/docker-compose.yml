@@ -1,12 +1,16 @@
-version: "3.9"
+version: "2.2"
 services:
-  mysql:
+  db:
     image: "mariadb:10.6"
     restart: always
     env_file:
       - .env
-    volumes:
-      - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    #volumes:
+    #  - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    command:
+      - "--server-id=${MYSQL_SERVER_ID}"
+      - "--log_bin=slave-bin"
+      - "--log_slave_updates=on"
     logging:
       driver: json-file
       options:
@@ -24,7 +28,7 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
     depends_on:
-      - "mysql"
+      - "db"
     logging:
       driver: json-file
       options:
