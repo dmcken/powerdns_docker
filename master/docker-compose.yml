@@ -4,7 +4,7 @@ services:
     image: "mariadb:10.6"
     restart: always
     env_file:
-      - .env
+      - .env_server
     ports:
       - "3306:3306"
     volumes:
@@ -25,7 +25,7 @@ services:
         buildno: v0.0.1
     restart: always
     env_file:
-      - .env
+      - .env_server
     ports:
       - "53:53/tcp"
       - "53:53/udp"
