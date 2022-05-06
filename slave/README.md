@@ -15,6 +15,7 @@
    cp env.example .env
    ```
 5. Edit .env
+   1. Set 
    
 6. Build images:
    ```
@@ -24,3 +25,6 @@
    ```
    docker-compose up -d
    ```
+
+
+Secure password generator: https://passwordsgenerator.net/
