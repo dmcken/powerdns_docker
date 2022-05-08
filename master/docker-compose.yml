@@ -1,18 +1,17 @@
 version: "3.9"
 services:
-  mysql:
+  db:
     image: "mariadb:10.6"
     restart: always
     env_file:
       - .env_server
     ports:
       - "3306:3306"
-    volumes:
-      # This should not be necessary
-      # - type: volume
-      #   source: ./db_data
-      #   target: /var/lib/mysql
-      - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    command:
+      - "--server-id=${MYSQL_SERVER_ID}"
+      - "--log_bin=master-bin"
+      - "--binlog-format=MIXED"
+      - "--log_slave_updates=on"
     logging:
       driver: json-file
       options:
@@ -36,19 +35,16 @@ services:
       driver: json-file
       options:
         max-size: 50m
-  mysql-admin:
+  db-admin:
     image: "mariadb:10.6"
     restart: always
     env_file:
       - .env_admin
-    #ports:
-    #  - "3306:3306"
-    volumes:
-      # This should not be necessary
-      # - type: volume
-      #   source: ./db_data
-      #   target: /var/lib/mysql
-       - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
+    command:
+      - "--server-id=${MYSQL_SERVER_ID}"
+      - "--log_bin=master-bin"
+      - "--binlog-format=MIXED"
+      - "--log_slave_updates=on"
     logging:
       driver: json-file
       options:
