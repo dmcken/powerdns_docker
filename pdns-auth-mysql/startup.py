@@ -45,6 +45,7 @@ def setup_mysql_slave_tables():
         'database': 'mysql',
         'cursorclass': pymysql.cursors.DictCursor,
     }
+
     with pymysql.connect(**master_conn_data) as master_connection:
         with master_connection.cursor() as master_cursor:
             # Setup replication user
@@ -54,7 +55,7 @@ def setup_mysql_slave_tables():
                 IDENTIFIED BY '{repl_pass}';
             """)
             master_cursor.execute("FLUSH PRIVILEGES;")
-    
+
             # Fetch backup
             logging.info("Dumping database from master")
             res = subprocess.run([
@@ -72,7 +73,7 @@ def setup_mysql_slave_tables():
                 logging.error(f"Got error fetching dump from master: {res.returncode}")
                 raise RuntimeError("Unable to dump master server")
 
-            # Restore backup
+            # Restore backup to the local db
             logging.info("Importing backup into local db")
             res = subprocess.run([
                     # 'cat', tmp_dump_sql,
