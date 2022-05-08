@@ -2,6 +2,7 @@
 FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG buildno=latest
 
 LABEL org.opencontainers.image.title="PowerDNS Authoritative DNS Server (MariaDB backend)"
 LABEL org.opencontainers.image.authors="David Mc Ken <david.mcken@gmail.com>"
