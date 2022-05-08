@@ -5,14 +5,12 @@ services:
     restart: always
     env_file:
       - .env
-    #volumes:
-    #  - ./90-extra.cnf:/etc/mysql/mariadb.conf.d/90-extra.cnf
     command:
       - "--server-id=${MYSQL_SERVER_ID}"
-      - "--replicate-do-db=${MYSQL_DATABASE}"
       - "--log_bin=slave-bin"
       - "--log_slave_updates=on"
       - "--binlog-format=MIXED"
+      - "--replicate-ignore-db=mysql"
     logging:
       driver: json-file
       options:
