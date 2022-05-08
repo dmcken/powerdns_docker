@@ -1,4 +1,7 @@
 #!/usr/bin/env -S python3
+'''
+Setup script for PowerDNS server
+'''
 
 import os
 #import jinja2
@@ -24,15 +27,85 @@ def setup_mysql_slave_tables():
 
 
     '''
-    pass
+    tmp_dump_sql = '/tmp/dump.sql'
+
+    db_root_pass = os.getenv('MYSQL_ROOT_PASSWORD', '')
+
+    repl_host = os.getenv('PDNS_REPL_HOSTNAME', '')
+    repl_user = os.getenv('PDNS_REPL_USERNAME', '')
+    repl_pass = os.getenv('PDNS_REPL_PASSWORD', '')
+    repl_db   = os.getenv('PDNS_REPL_DATABASE', '')
+
+    logging.info("Setting up slave database")
+
+    master_conn_data = {
+        'host': repl_host,
+        'user': os.getenv('PDNS_REPL_ROOT_USER', 'root'),
+        'password': os.getenv('PDNS_REPL_ROOT_PASSWORD', ''),
+        'database': 'mysql',
+        'cursorclass': pymysql.cursors.DictCursor,
+    }
+    with pymysql.connect(**master_conn_data) as master_connection:
+        with master_connection.cursor() as master_cursor:
+            # Setup replication user
+            master_cursor.execute(f"""
+                GRANT REPLICATION SLAVE ON *.* 
+                TO '{repl_user}'@'%'
+                IDENTIFIED BY '{repl_pass}';
+            """)
+            master_cursor.execute("FLUSH PRIVILEGES;")
+    
+            # Fetch backup
+            logging.info("Dumping database from master")
+            res = subprocess.run([
+                    'mysqldump',
+                    '--master-data', # --source-data is newer version
+                    '-h', master_conn_data['host'],
+                    '-u', master_conn_data['user'],
+                    f"--password={master_conn_data['password']}",
+                    '--databases', repl_db,
+                ],
+                stdout=open(tmp_dump_sql, 'w', encoding='utf-8'),
+                check=True
+            )
+            if res.returncode != 0:
+                logging.error(f"Got error fetching dump from master: {res.returncode}")
+                raise RuntimeError("Unable to dump master server")
+
+            # Restore backup
+            logging.info("Importing backup into local db")
+            res = subprocess.run([
+                    # 'cat', tmp_dump_sql,
+                    # '|',
+                    'mysql', '-u', 'root',
+                    f'-p{db_root_pass}',
+                ],
+                stdin=open(tmp_dump_sql, 'r', encoding='utf-8'),
+                check=True,
+            )
+
+            # Setup replication
+            logging.info("Setup MASTER replication")
+            sql = f"""
+                CHANGE MASTER TO
+                    MASTER_HOST='{repl_host}',
+                    MASTER_USER='{repl_user}',
+                    MASTER_PASSWORD='{repl_pass}',
+                    MASTER_PORT=3306,
+                    MASTER_CONNECT_RETRY=10;
+            """
+            logging.debug(f"CHANGE MASTER sql:\n{sql}")
+            master_cursor.execute(sql)
+
+            master_cursor.execute("START SLAVE;")
+
+    return
 
 def setup_mysql(op_mode, **argvs):
     '''
     '''
     # TODO: Break this entire fucntion out to a separate file just to
     # handle each driver, MySQL, Postgres and sqlite
-
-    tmp_dump_sql = '/tmp/dump.sql'
 
     db_host     = os.getenv('PDNS_DB_HOSTNAME', 'mysql')
     db_user     = os.getenv('PDNS_DB_USERNAME', 'pdns-auth')
@@ -126,65 +199,7 @@ def setup_mysql(op_mode, **argvs):
                         logging.info(f"Executing SQL:\n{curr_statement}")
                         cursor.execute(curr_statement)
                 elif op_mode == 'slave':
-                    repl_host = os.getenv('PDNS_REPL_HOSTNAME', '')
-                    repl_user = os.getenv('PDNS_REPL_USERNAME', '')
-                    repl_pass = os.getenv('PDNS_REPL_PASSWORD', '')
-                    repl_db   = os.getenv('PDNS_REPL_DATABASE', '')
-
-                    logging.info("Setting up slave database")
-
-                    master_conn_data = {
-                        'host': repl_host,
-                        'user': os.getenv('PDNS_REPL_ROOT_USER', 'root'),
-                        'password': os.getenv('PDNS_REPL_ROOT_PASSWORD', ''),
-                        'database': 'mysql',
-                        'cursorclass': pymysql.cursors.DictCursor,
-                    }
-                    master_connection = pymysql.connect(**master_conn_data)
-                    with master_connection:
-                        with master_connection.cursor() as master_cursor:
-                            # Setup replication user
-                            master_cursor.execute(f"""
-                                GRANT REPLICATION SLAVE ON *.* 
-                                TO '{repl_user}'@'%'
-                                IDENTIFIED BY '{repl_pass}';
-                            """)
-                            master_cursor.execute("FLUSH PRIVILEGES;")
-                    
-                            # Fetch backup
-                            logging.info("Dumping database from master")
-                            res = subprocess.run([
-                                'mysqldump',
-                                '--master-data', # --source-data is newer version
-                                '-h', master_conn_data['host'],
-                                '-u', master_conn_data['user'],
-                                f"--password={master_conn_data['password']}",
-                                '--databases', repl_db,
-                            ], stdout=open(tmp_dump_sql, 'w'), check=True)
-
-                            # Restore backup
-                            logging.info("Importing backup into local db")
-                            res = subprocess.run([
-                                # 'cat', tmp_dump_sql,
-                                # '|',
-                                'mysql', '-u', 'root',
-                                f'-p{db_root_pass}',
-                            ], stdin=open(tmp_dump_sql, 'r'), check=True)
-                    
-                            # Setup replication
-                            logging.info("Setup MASTER replication")
-                            sql = f"""
-                                CHANGE MASTER TO
-                                    MASTER_HOST='{repl_host}',
-                                    MASTER_USER='{repl_user}',
-                                    MASTER_PASSWORD='{repl_pass}',
-                                    MASTER_PORT=3306,
-                                    MASTER_CONNECT_RETRY=10; 
-                            """
-                            logging.debug(f"CHANGE MASTER sql:\n{sql}")
-                            master_cursor.execute(sql)
-
-                            master_cursor.execute("START SLAVE;")
+                    setup_mysql_slave_tables()
                 else:
                     logging.error(f"Unknown operational mode: '{op_mode}")
             else:
