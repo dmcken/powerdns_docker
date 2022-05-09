@@ -1,14 +1,17 @@
 version: "3.3"
 services:
-  db:
+  db-server:
     image: "mariadb:10.6"
     restart: unless-stopped
-    env_file:
-      - .env_server
+    environment:
+      MYSQL_ROOT_PASSWORD: ${SVR_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE:      ${SVR_MYSQL_DATABASE}
+      MYSQL_USER:          ${SVR_MYSQL_USER}
+      MYSQL_PASSWORD:      ${SVR_MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     command:
-      - "--server-id=${MYSQL_SERVER_ID}"
+      - "--server-id=${SVR_SERVER_ID}"
       - "--log_bin=master-bin"
       - "--binlog-format=MIXED"
       - "--log_slave_updates=on"
@@ -24,13 +27,13 @@ services:
         buildno: v0.0.1
     restart: unless-stopped
     env_file:
-      - .env_server
+      - .env
     ports:
       - "53:53/tcp"
       - "53:53/udp"
       - "8081:8081"
     depends_on:
-      - "db"
+      - "db-server"
     logging:
       driver: json-file
       options:
@@ -38,10 +41,13 @@ services:
   db-admin:
     image: "mariadb:10.6"
     restart: unless-stopped
-    env_file:
-      - .env_admin
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ADM_MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE:      ${ADM_MYSQL_DATABASE}
+      MYSQL_USER:          ${ADM_MYSQL_USER}
+      MYSQL_PASSWORD:      ${ADM_MYSQL_PASSWORD}
     command:
-      - "--server-id=${MYSQL_SERVER_ID}"
+      - "--server-id=${ADM_SERVER_ID}"
       - "--log_bin=master-bin"
       - "--binlog-format=MIXED"
       - "--log_slave_updates=on"
@@ -53,10 +59,10 @@ services:
     image: "ngoduykhanh/powerdns-admin:0.2.3"
     restart: unless-stopped
     env_file:
-      - .env_admin
+      - .env
     ports:
       - target: 80
-        published: 9191       # ${ADMIN_WEB_PORT:-80}
+        published: ${ADMIN_WEB_PORT:-80}
         protocol: tcp
     depends_on:
       - "db-admin"
