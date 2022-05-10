@@ -33,7 +33,7 @@ def setup_mysql_master_tables(cursor, sql_path, schema_file_name):
         logging.info(f"Executing SQL:\n{curr_statement}")
         cursor.execute(curr_statement)
 
-def setup_mysql_slave_tables(slave_cursor):
+def setup_mysql_slave_tables():
     '''
     Setup MySQL backend for PowerDNS authoritative slave
 
@@ -55,6 +55,13 @@ def setup_mysql_slave_tables(slave_cursor):
         'user': os.getenv('PDNS_REPL_ROOT_USER', 'root'),
         'password': os.getenv('PDNS_REPL_ROOT_PASSWORD', ''),
         'database': 'mysql',
+        'cursorclass': pymysql.cursors.DictCursor,
+    }
+
+    slave_conn_data = {
+        'host': 'db',
+        'user': 'root',
+        'password': os.getenv('MYSQL_ROOT_PASSWORD', ''),
         'cursorclass': pymysql.cursors.DictCursor,
     }
 
@@ -99,6 +106,9 @@ def setup_mysql_slave_tables(slave_cursor):
                 stdin=open(tmp_dump_sql, 'r', encoding='utf-8'),
                 check=True,
             )
+
+    with pymysql.connect(**slave_conn_data) as slave_connection:
+        with slave_connection.cursor() as slave_cursor:
 
             # Setup replication
             logging.info("Setup MASTER replication")
@@ -209,7 +219,7 @@ def setup_mysql(op_mode, **argvs):
                         argvs['schema_file_name']
                     )
                 elif op_mode == 'slave':
-                    setup_mysql_slave_tables(cursor)
+                    setup_mysql_slave_tables()
                 else:
                     logging.error(f"Unknown operational mode: '{op_mode}")
             else:
