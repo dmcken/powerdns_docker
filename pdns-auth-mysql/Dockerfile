@@ -5,7 +5,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG buildno=latest
 
 LABEL org.opencontainers.image.title="PowerDNS Authoritative DNS Server (MariaDB backend)"
-LABEL org.opencontainers.image.authors="David Mc Ken <david.mcken@gmail.com>"
+LABEL org.opencontainers.image.authors="David Mc Ken <david.mcken@codepro.guru>"
 LABEL org.opencontainers.image.description="Master / Slave authoritative DNS using mysql replication to propagate to the slaves"
 # org.opencontainers.image.vendor="None"
 # org.opencontainers.image.url="https://zabbix.com/"
