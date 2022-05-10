@@ -33,7 +33,7 @@ def setup_mysql_master_tables(cursor, sql_path, schema_file_name):
         logging.info(f"Executing SQL:\n{curr_statement}")
         cursor.execute(curr_statement)
 
-def setup_mysql_slave_tables():
+def setup_mysql_slave_tables(slave_cursor):
     '''
     Setup MySQL backend for PowerDNS authoritative slave
 
@@ -111,9 +111,10 @@ def setup_mysql_slave_tables():
                     MASTER_CONNECT_RETRY=10;
             """
             logging.debug(f"CHANGE MASTER sql:\n{sql}")
-            master_cursor.execute(sql)
+            slave_cursor.execute(sql)
 
-            master_cursor.execute("START SLAVE;")
+            logging.info("Starting slave")
+            slave_cursor.execute("START SLAVE;")
 
     return
 
@@ -208,7 +209,7 @@ def setup_mysql(op_mode, **argvs):
                         argvs['schema_file_name']
                     )
                 elif op_mode == 'slave':
-                    setup_mysql_slave_tables()
+                    setup_mysql_slave_tables(cursor)
                 else:
                     logging.error(f"Unknown operational mode: '{op_mode}")
             else:
