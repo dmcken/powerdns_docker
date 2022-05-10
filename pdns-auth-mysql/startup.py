@@ -13,13 +13,25 @@ import pymysql.cursors
 
 
 
-def setup_mysql_master_tables(cursor, ):
+def setup_mysql_master_tables(cursor, sql_path, schema_file_name):
     '''
     Setup MySQL backend for PowerDNS authoritative master
 
 
     '''
-    pass
+    # There are no tables, we need to import.
+    full_sql_path = os.path.join(sql_path, schema_file_name)
+    logging.info(f"Importing tables from: {full_sql_path}")
+
+    import_sql = open(full_sql_path, 'rt', encoding='utf-8').read()
+
+    statements = filter(lambda x: x != '', 
+        map(lambda x: x.strip(),  import_sql.split(';'))
+    )
+
+    for curr_statement in statements:
+        logging.info(f"Executing SQL:\n{curr_statement}")
+        cursor.execute(curr_statement)
 
 def setup_mysql_slave_tables():
     '''
@@ -104,6 +116,7 @@ def setup_mysql_slave_tables():
 
 def setup_mysql(op_mode, **argvs):
     '''
+    Setup MySQL DB setup
     '''
     # TODO: Break this entire fucntion out to a separate file just to
     # handle each driver, MySQL, Postgres and sqlite
@@ -186,19 +199,11 @@ def setup_mysql(op_mode, **argvs):
 
             if len(result) == 0:
                 if op_mode == 'master':
-                    # There are no tables, we need to import.
-                    full_sql_path = os.path.join(argvs['sql_path'],  argvs['schema_file_name'])
-                    logging.info(f"Importing tables from: {full_sql_path}")
-
-                    import_sql = open(full_sql_path, 'rt').read()
-
-                    statements = filter(lambda x: x != '', 
-                        map(lambda x: x.strip(),  import_sql.split(';'))
+                    setup_mysql_master_tables(
+                        cursor,
+                        argvs['sql_path'],
+                        argvs['schema_file_name']
                     )
-
-                    for curr_statement in statements:
-                        logging.info(f"Executing SQL:\n{curr_statement}")
-                        cursor.execute(curr_statement)
                 elif op_mode == 'slave':
                     setup_mysql_slave_tables()
                 else:
