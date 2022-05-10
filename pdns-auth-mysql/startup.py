@@ -73,10 +73,11 @@ def setup_mysql_slave_tables():
             res = subprocess.run([
                     'mysqldump',
                     '--master-data', # --source-data is newer version
+                    '--all-databases',
+                    '--single-transaction'
                     '-h', master_conn_data['host'],
                     '-u', master_conn_data['user'],
                     f"--password={master_conn_data['password']}",
-                    '--databases', repl_db,
                 ],
                 stdout=open(tmp_dump_sql, 'w', encoding='utf-8'),
                 check=True
