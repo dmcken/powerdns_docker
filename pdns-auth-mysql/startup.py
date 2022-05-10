@@ -74,7 +74,7 @@ def setup_mysql_slave_tables():
                     'mysqldump',
                     '--master-data', # --source-data is newer version
                     '--all-databases',
-                    '--single-transaction'
+                    '--single-transaction',
                     '-h', master_conn_data['host'],
                     '-u', master_conn_data['user'],
                     f"--password={master_conn_data['password']}",
