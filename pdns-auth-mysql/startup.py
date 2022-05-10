@@ -46,7 +46,7 @@ def setup_mysql_slave_tables():
     repl_host = os.getenv('PDNS_REPL_HOSTNAME', '')
     repl_user = os.getenv('PDNS_REPL_USERNAME', '')
     repl_pass = os.getenv('PDNS_REPL_PASSWORD', '')
-    repl_db   = os.getenv('PDNS_REPL_DATABASE', '')
+    #repl_db   = os.getenv('PDNS_REPL_DATABASE', '')
 
     logging.info("Setting up slave database")
 
@@ -91,7 +91,9 @@ def setup_mysql_slave_tables():
             res = subprocess.run([
                     # 'cat', tmp_dump_sql,
                     # '|',
-                    'mysql', '-u', 'root',
+                    'mysql',
+                    '-h', 'db',
+                    '-u', 'root',
                     f'-p{db_root_pass}',
                 ],
                 stdin=open(tmp_dump_sql, 'r', encoding='utf-8'),
