@@ -18,7 +18,7 @@ LABEL org.opencontainers.image.description="Master / Slave authoritative DNS usi
 
 RUN apt update
 
-RUN apt install -y iputils-ping mysql-client pdns-server pdns-backend-mysql python3-pip python3-setuptools  && \
+RUN apt install -y iputils-ping mariadb-client pdns-server pdns-backend-mysql python3-pip python3-setuptools  && \
     rm -rf /var/lib/apt/lists/* && \
     apt clean
 
