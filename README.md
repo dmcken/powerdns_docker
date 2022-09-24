@@ -3,6 +3,8 @@ Power DNS deployment of a master with PowerDNS Admin and as many slaves as you w
 
 ## Architechture:
 
+![Architecture Diagram](docs/architecture.png)
+
 ### Master Node:
 
 Notes:
