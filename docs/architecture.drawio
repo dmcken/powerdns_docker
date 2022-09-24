@@ -1,1 +1,85 @@
-<mxfile host="Electron" modified="2022-09-24T09:07:09.856Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/20.3.0 Chrome/104.0.5112.114 Electron/20.1.3 Safari/537.36" etag="sLJsU-f0NtN43zQwM67q" version="20.3.0" type="device"><diagram id="K-CKfiGYJA4B1qXLnt_A" name="Page-1">7Vpbc9o6EP41PIbxlctjgLR5SDLp0HPpeWGELYwa22JkcXF//VnZsrEREJPaQJJOmIm1koW0u9/utxItcxhsvjK0mD9SF/stQ3M3LXPUMgzdMoyW+GhunEp6hpUKPEZcOWgrGJNfWAo1KV0SF0elgZxSn5NFWejQMMQOL8kQY3RdHjajfvlbF8jDimDsIF+V/kNcPpe7sLWt/B4Tb559s67JngBlg6UgmiOXrgsi865lDhmlPH0KNkPsC+Vleknf+3KgN18YwyGv8sL9E/nrdvJjuV7f/KI/8aKvfTdu5Cwr5C/lhh9RxDED2RizlXhI1s7jTCGMLkMXizm1ljlYzwnH4wVyRO8aXABkcx740NLh0UdT7D/TiHBCQ5A5sFaY0xzAzJyAlh92BnAqZkA+8fYOv5UdU8o5DaBDLh+68eagXvRc2+CmmAaYsxiGyBeMzGJxbsK0vd7a27KkbF6wtZkNRNLHvHzurRngQVriBKtkGCmoHbvglrJJGZ9Tj4bIv9tKB2XDbMc8UKHTxBw/MeexxBhaclo2FuiLxf+K99tm384EP+SESWO0KbXiYusZMwLbF/ZKhBFHjN8KCIIgpCHOZF+I0IZ80c1GOD6KIuKkQjlEzy0stn/cvqAtumQOPqLWrowfiHmYHxnX2+8vDPuIk1V5HbXbvqsg8tkNo8N4jF4wd+ZSnyhapEFwRjbCFYrmXVAS8mS19qBlj/bBjARJNBzMaMilm+jGVj4igQd78slU7CxyEIb/o6dxO1p5NWGxv4NFW1ewaO+Bot0YEs1LIPH6oNOrCB29c0ns9NRsFo+/PYBohDiaoggctuPD+gdTAFLHE09ZvqsfVj6e8TeCChY9yZY88XAIodWRKNtNqSxFwcGMGhDXTbxyN4fmHTXg1tI6Jdwalqng1uydE7f9d4xbF0XzZBk1g7hfFcT2JUHcV0D8n9CkoT2iEBATiG0fRWuCSMzuVjgFZmKZjHxrRf1qu+Zj9AUPqU/Z1n4nU9icm+4C7gC3nYHhs+9sGaati790yQuxvWDjidKqncSGdhRDuAom6dtt5AYknEDtE1FQxe/juNPbzb+9SvnX7DTkDBnFLnjD9TEg6ryALeojQRUKkn1GsJpCpGG/42BaY/zU7fdQQGSr3KkgbpJYcXXgGS4jiJYjGiAS1gchW9+NY3Y1CBlNQUhXNH/eit42OqWKvq0ZH6Oo1ztVWc1FUbknb53XAayu9dkdoHvRsNxRwvJ4fA+C78swxH7URGTOasO3BOa/n58mXxHHaxQfqDxlfXv8KLfJk1tLM0tR3rT2nNzaapRvrOo0K7BVD0C9OLh5eY2Bptlw7VSl6J1y6rO6qlJyhlnUSi6sP/apnu+jlSjpoN5RE2OzNwy5A756yZA6cCU/PeINqqEuZwhdve65OkJ4ejX1VuWftYbSTZWV0zVmo6cxSG+XkNoZ4WkeujqTnHbEf5I95DRdu8zXtWolb2ORXFevYeRR8u758eGTZRnk/hws1+4tPb3kLYbqLOc9bO4pVv5Q5yNHuc7r/FxGvivn52aF3Ng0d7N6V8fd1LRV4G6qhj4MdztgqAtyN5VFXx9RqIm7va7883K3g/fKf8jAOcjA8aB5bWSg+xnJQOXDusp30Je9Q1EvoT9XtXYccuer1qC5/YVs0lf4nbF59z8=</diagram></mxfile>
+<mxfile host="65bd71144e">
+    <diagram id="K-CKfiGYJA4B1qXLnt_A" name="Page-1">
+        <mxGraphModel dx="980" dy="358" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="HNiUA_Yuww-zojep90T2-1" value="Master Server" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=top;align=center;verticalAlign=bottom;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="110" width="440" height="310" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.395;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="HNiUA_Yuww-zojep90T2-7" target="HNiUA_Yuww-zojep90T2-8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-7" value="Pdns Server" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/DNS.svg;" parent="1" vertex="1">
+                    <mxGeometry x="290" y="151" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="HNiUA_Yuww-zojep90T2-8" target="HNiUA_Yuww-zojep90T2-16" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-8" value="MySQL Database&lt;br&gt;Master" style="sketch=0;aspect=fixed;html=1;points=[];align=left;image;fontSize=12;image=img/lib/mscae/SQL_Database_generic.svg;labelPosition=right;verticalLabelPosition=middle;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="406" y="243" width="38" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;dashed=1;fillColor=#dae8fc;gradientColor=#7ea6e0;strokeColor=#6c8ebf;" parent="1" source="HNiUA_Yuww-zojep90T2-9" target="HNiUA_Yuww-zojep90T2-15" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-9" value="Zone Management" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#515151;shape=mxgraph.mscae.system_center.admin_console" parent="1" vertex="1">
+                    <mxGeometry x="680" y="158" width="50" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-10" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="110" width="50" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="HNiUA_Yuww-zojep90T2-15" target="HNiUA_Yuww-zojep90T2-8" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-15" value="Pdns-admin" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/CustomDomain.svg;" parent="1" vertex="1">
+                    <mxGeometry x="510" y="155" width="50" height="42" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-16" value="SSH Tunnels" style="sketch=0;aspect=fixed;html=1;points=[];align=right;image;fontSize=12;image=img/lib/mscae/VPN_Gateway.svg;labelPosition=left;verticalLabelPosition=top;verticalAlign=bottom;" parent="1" vertex="1">
+                    <mxGeometry x="403" y="340" width="45" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-30" value="" style="group" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="160" y="470" width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-2" value="Slave #1" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="HNiUA_Yuww-zojep90T2-30" vertex="1">
+                    <mxGeometry width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-11" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;" parent="HNiUA_Yuww-zojep90T2-30" vertex="1">
+                    <mxGeometry width="50" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-13" value="PowerDNS Authoritative" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/DNS.svg;" parent="HNiUA_Yuww-zojep90T2-30" vertex="1">
+                    <mxGeometry x="75" y="100" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-17" value="MySQL&lt;br&gt;Database&lt;br&gt;Slave" style="sketch=0;aspect=fixed;html=1;points=[];align=left;image;fontSize=12;image=img/lib/mscae/SQL_Database_generic.svg;labelPosition=right;verticalLabelPosition=middle;verticalAlign=middle;" parent="HNiUA_Yuww-zojep90T2-30" vertex="1">
+                    <mxGeometry x="81" y="20" width="38" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="HNiUA_Yuww-zojep90T2-30" source="HNiUA_Yuww-zojep90T2-13" target="HNiUA_Yuww-zojep90T2-17" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-31" value="" style="group;verticalAlign=top;labelBackgroundColor=default;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="480" y="470" width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-3" value="Slave #2" style="rounded=0;whiteSpace=wrap;html=1;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;" parent="HNiUA_Yuww-zojep90T2-31" vertex="1">
+                    <mxGeometry width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-12" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;" parent="HNiUA_Yuww-zojep90T2-31" vertex="1">
+                    <mxGeometry width="50" height="41" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-18" value="MySQL&lt;br&gt;Database&lt;br&gt;Slave" style="sketch=0;aspect=fixed;html=1;points=[];align=left;image;fontSize=12;image=img/lib/mscae/SQL_Database_generic.svg;labelPosition=right;verticalLabelPosition=middle;verticalAlign=middle;" parent="HNiUA_Yuww-zojep90T2-31" vertex="1">
+                    <mxGeometry x="81" y="20" width="38" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="HNiUA_Yuww-zojep90T2-31" source="HNiUA_Yuww-zojep90T2-19" target="HNiUA_Yuww-zojep90T2-18" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-19" value="PowerDNS Authoritative" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/DNS.svg;" parent="HNiUA_Yuww-zojep90T2-31" vertex="1">
+                    <mxGeometry x="75" y="100" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.526;entryY=0.02;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=none;startFill=0;endArrow=classic;endFill=1;fillColor=#fa6800;strokeColor=#C73500;" parent="1" source="HNiUA_Yuww-zojep90T2-16" target="HNiUA_Yuww-zojep90T2-18" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HNiUA_Yuww-zojep90T2-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.474;entryY=0.02;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=none;startFill=0;endArrow=classic;endFill=1;fillColor=#fa6800;strokeColor=#C73500;" parent="1" source="HNiUA_Yuww-zojep90T2-16" target="HNiUA_Yuww-zojep90T2-17" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
