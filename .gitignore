@@ -1,5 +1,7 @@
 .env
 *.bz2
+*.bkp
+*.dtmp
 
 # MySQL extra config file.
 90-extra.cnf
