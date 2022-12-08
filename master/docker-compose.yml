@@ -56,7 +56,7 @@ services:
       options:
         max-size: 50m
   powerdns-admin:
-    image: "ngoduykhanh/powerdns-admin:0.2.3"
+    image: "ngoduykhanh/powerdns-admin:0.3.0"
     restart: unless-stopped
     env_file:
       - .env
